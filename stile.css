@@ -1,0 +1,16 @@
+* {
+	font-family: "Courier New";
+	color:white;
+}
+h1{
+	text-align:center;
+	font-size:30pt;
+}
+canvas {
+	background-color:black;
+	border: solid white 1px;
+	padding:2px;
+}
+body {
+	background-color:black;
+}

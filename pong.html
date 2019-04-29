@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+    <title>Pong</title>
+	<link rel="stylesheet" type="text/css" href="stile.css">
+</head>
+
+<body>
+	<h1>PONG ONLINE</h1>
+	<div style="text-align:center">
+        <canvas id="canv" width="500" height="550"></canvas>
+    </div>
+	<div style="text-align:center">
+		<canvas id="canvPunti" width="500" height="100"></canvas>
+    </div>
+	<br>
+	<h2>Regolamento</h2>
+	<p>Ogni cinque punti la velocità della pallina e della piattaforma aumentano.<br>La pallina parte da una posizione casuale nel campo.</p>
+    
+    <script>
+        var canvas = document.getElementById("canv");
+        var ctx = canvas.getContext("2d");
+		
+        var canvasPunti = document.getElementById("canvPunti");
+        var ctxPunti = canvasPunti.getContext("2d");
+		
+        ctxPunti.font = "50px Courier New";
+		
+        var dimXcanv = canvas.width;
+        var dimYcanv = canvas.height;
+        var dimXcanvPunti = canvasPunti.width;
+        var dimYcanvPunti = canvasPunti.height;
+        
+        var posXPiattaforma;
+        var posYPiattaforma;
+        var dimYPiattaforma=75;
+        var dimXPiattaforma=3;
+        
+        var punti=0;
+        
+        document.addEventListener("keydown", keyDownHandler, false);
+        document.addEventListener("keyup", keyUpHandler, false);  
+        var vaiSu;
+        var vaiGiu;
+        function keyDownHandler(e) {
+        	if(e.key == "Up" || e.key == "ArrowUp") {
+        		vaiSu = true;
+        	}
+        	else if(e.key == "Down" || e.key == "ArrowDown") {
+        		vaiGiu = true;
+        	}
+        }
+        function keyUpHandler(e) {
+        	if(e.key == "Up" || e.key == "ArrowUp") {
+        		vaiSu = false;
+        	}
+        	else if(e.key == "Down" || e.key == "ArrowDown") {
+        		vaiGiu = false;
+        	}
+        }
+         
+         class Piattaforma {
+         constructor(altezza, larghezza) {
+         	this.altezza = altezza;
+         	this.larghezza = larghezza;
+         	posXPiattaforma = altezza;
+        	
+         	this.y = dimYcanv/2-this.altezza/2;
+         	this.yDaAggiungere = 5;
+        	
+         	this.disegnaPiattaforma = function()
+        		{
+        			ctx.beginPath();         			
+        			ctx.rect(0, this.y, this.larghezza, this.altezza);
+        			ctx.fillStyle = "white";
+        			ctx.fill();
+        			ctx.closePath();
+        				
+        			if(vaiSu && this.y>=0)
+        				this.y -= this.yDaAggiungere;
+        			if(vaiGiu && (this.y+this.altezza)<=dimYcanv)
+        				this.y += this.yDaAggiungere;
+        			posYPiattaforma = this.y;
+        		}
+         	}
+         }
+         
+         class Palla {
+           constructor(raggio) {
+         	this.raggio = raggio;
+         	
+         	this.x = Math.floor(Math.random() * dimXcanv);
+         	this.y = dimYcanv/2;
+         	this.xDaAggiungere = 2;
+         	this.yDaAggiungere = this.xDaAggiungere;
+         	
+         	this.disegnaPalla = function()
+         	{
+         		ctx.beginPath();
+         		ctx.arc(this.x, this.y, this.raggio, 0, Math.PI*2);
+         		ctx.fillStyle = "white";
+         		ctx.fill();
+         		this.x += this.xDaAggiungere;
+         		this.y += this.yDaAggiungere;
+         		ctx.closePath();
+        		
+         		if(this.x>=dimXcanv||this.x<=0)
+         			this.xDaAggiungere *= -1;
+         		if(this.y>=dimYcanv||this.y<=0)
+         			this.yDaAggiungere *= -1;
+        
+        		if(this.x<=dimXPiattaforma&&(posYPiattaforma<=this.y&&this.y<=posYPiattaforma+dimYPiattaforma))
+        		{
+        			punti++;
+        			this.xDaAggiungere *= -1;
+					disegnaPunti();
+					aggiornaVelocita();
+        		}
+         	}
+           }
+         };
+         
+         function disegnaPunti() {
+           ctxPunti.beginPath();
+			ctxPunti.clearRect(0, 0, dimXcanvPunti, dimYcanvPunti);
+			ctxPunti.fillStyle = "white";
+			ctxPunti.fillText("Punteggio: "+punti, 50, 65);
+			ctxPunti.closePath();
+         }
+		 
+		 function aggiornaVelocita() {
+			if(punti%5==0)
+			{
+				pall.xDaAggiungere+=1;
+				piattaforma.yDaAggiungere+=1;
+			}
+         }
+		 
+		 function disegnaSchermo() {
+           	ctx.beginPath();
+         	ctx.clearRect(0, 0, dimXcanv, dimYcanv);
+         	ctx.closePath();
+         	pall.disegnaPalla();
+        	piattaforma.disegnaPiattaforma();
+        	
+         }
+		 
+         let pall = new Palla(5)
+         let piattaforma = new Piattaforma(dimYPiattaforma, dimXPiattaforma)
+         	
+         disegnaPunti();
+         setInterval(disegnaSchermo, 10);
+    </script>
+</body>
+
+</html>

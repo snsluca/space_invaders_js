@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+    <title>Space invaders</title>
+	<link rel="stylesheet" type="text/css" href="stile.css">
+</head>
+
+<body>
+	<h1>SPACE INVADERS</h1>
+	<div style="text-align:center">
+        <canvas id="canv" width="500" height="550"></canvas>
+    </div>
+	<div style="text-align:center">
+		<canvas id="canvPunti" width="500" height="100"></canvas>
+    </div>
+	<script src="gestioneTasti.js"></script>
+	<script src="giocatore.js"></script>
+	<script src="proiettile.js"></script>
+	<script src="alieno.js"></script>
+	<script src="filaAlieni.js"></script>
+	<script src="mattone.js"></script>
+	<script src="muro.js"></script>
+	<script src="punteggio.js"></script>
+	
+    <script>
+        var canvas = document.getElementById("canv");
+        var ctx = canvas.getContext("2d");
+        var dimXcanv = canvas.width;
+        var dimYcanv = canvas.height;
+		 
+		function disegnaSchermo() {
+           	var distanzaBordoDx;
+			ctx.beginPath();
+         	ctx.clearRect(0, 0, dimXcanv, dimYcanv);
+         	ctx.closePath();
+			for(var i=0; i<fileAlieniArray.length; i++)
+			{
+				fileAlieniArray[i].disegnaFila();
+				for(var z=0; z<fileAlieniArray[i].alieni.length; z++)
+				{
+					fileAlieniArray[i].alieni[z].controllaCollisioneMuro(muro);
+				}
+			}
+			muro.disegnaMuro();
+         	giocatore.disegnaGiocatore();
+         	giocatore.controllaCollisioneMuro(muro);
+         }
+		
+		var dimensioniXalieno=50;
+        let giocatore = new Giocatore(50, 10);
+		
+		var fileAlieniArray= [];
+		let muro = new Muro(100, dimYcanv-dimYcanv/4);
+		
+		for(var i=0; i<3; i++)
+		{
+			let filaalieni = new filaAlieni(i*10*5, dimensioniXalieno, 10, dimXcanv, dimYcanv);
+			fileAlieniArray.push(filaalieni);
+		}		
+		
+        disegnaPunti();
+        setInterval(disegnaSchermo, 20);
+		 
+    </script>
+</body>
+
+</html>
