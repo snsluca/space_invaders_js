@@ -14,29 +14,41 @@ class filaAlieni {
 
         this.spaziTraAlieni = 15;
         this.temp = this.spaziTraAlieni;
-
+		
 		for (var i = 0; i < (this.dimXcanv / (this.dimX + this.spaziTraAlieni)) / 2; i++) {
 			let alieno = new Alieno(this.velocita, this.dimX, this.dimY, this.temp, this.y)
 			this.temp += this.dimX + this.spaziTraAlieni;
 			this.alieni.push(alieno);
 		}
 		
-        this.disegnaFila = function() {
-            var distanzaBordoDx = this.alieni[this.alieni.length - 1].x + this.dimX;
-            var distanzaBordoSx = this.alieni[0].x;
-
-            if (distanzaBordoSx < this.spaziTraAlieni + 1) {
-                dx = true;
-                sx = false;
-            } else if (this.dimXcanv - distanzaBordoDx < this.spaziTraAlieni + 1) {
-                dx = false;
-                sx = true;
-            }
+		this.eliminaAlienoFila = function() {
             for (var i = 0; i < this.alieni.length; i++) {
-                this.alieni[i].disegnaAlieno();
-                this.alieni[i].dx = dx;
-                this.alieni[i].sx = sx;
+                if(this.alieni[i].y<0)
+				{
+					this.alieni.splice(i, 1);
+				}
             }
+        }
+		
+        this.disegnaFila = function() {
+			if(this.alieni.length>0)
+			{
+				var distanzaBordoDx = this.alieni[this.alieni.length - 1].x + this.dimX;
+				var distanzaBordoSx = this.alieni[0].x;
+
+				if (distanzaBordoSx < this.spaziTraAlieni + 1) {
+					dx = true;
+					sx = false;
+				} else if (this.dimXcanv - distanzaBordoDx < this.spaziTraAlieni + 1) {
+					dx = false;
+					sx = true;
+				}
+				for (var i = 0; i < this.alieni.length; i++) {
+					this.alieni[i].disegnaAlieno();
+					this.alieni[i].dx = dx;
+					this.alieni[i].sx = sx;
+				}
+			}
         }
     }
 };

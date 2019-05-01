@@ -9,7 +9,7 @@ class Alieno {
 		this.dx = dx || false;
 		this.sx = sx || false;
 		
-        this.velocita = velocita || 5;
+        this.velocita = velocita || 0;
         this.proiettili = [];
 		
         this.disegnaAlieno = function() {
@@ -25,9 +25,9 @@ class Alieno {
             if (this.sx)
                 this.x -= this.velocita;
 
-			if(Math.floor(Math.random() * 150) == 0)
+			if(Math.floor(Math.random() * 200) == 0)
 			{
-				let proiettile = new Proiettile(2, 10, this.x + this.dimX / 2, this.y - this.dimY / 2, true);
+				let proiettile = new Proiettile(2, 10, this.x + this.dimX / 2, this.y + this.dimY / 2, true);
 				this.proiettili.push(proiettile);
 			}
 				
@@ -39,9 +39,22 @@ class Alieno {
             }
         }
 		
-		this.controllaCollisioneMuro = function(muro) {
-			for (var i = 0; i < this.proiettili.length; i++) {
-					this.proiettili[i].controllaCollisioneMuroAlieno(muro);
+		this.controllaCollisioneMuro = function(filamuro) {
+			for (var z = 0; z < filamuro.muri.length; z++) {
+				for (var i = 0; i < this.proiettili.length; i++) {
+						this.proiettili[i].controllaCollisioneMuro(filamuro.muri[z]);
+				}
+			}
+		}
+		
+		this.controllaCollisioneProiettiliGiocatore = function(proiettili, punti) {
+			for (var i = 0; i < proiettili.length; i++) {
+				if(this.y<=proiettili[i].y&&proiettili[i].y<=this.y+this.dimY&&this.x<=proiettili[i].x&&proiettili[i].x<=this.x+this.dimX)
+				{
+					punti++;
+					this.y=-dimY*2;
+					proiettili[i].y=-1;
+				}
             }
 		}
     }

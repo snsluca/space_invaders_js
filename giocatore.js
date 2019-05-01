@@ -3,7 +3,7 @@ class Giocatore {
         this.dimX = dimX;
         this.dimY = dimY;
 
-        this.x = dimYcanv / 2;
+        this.x = dimYcanv / 2-dimX;
         this.y = dimYcanv - dimY;
         this.velocita = 5;
         this.proiettili = [];
@@ -35,10 +35,25 @@ class Giocatore {
             }
         }
 		
-		this.controllaCollisioneMuro = function(muro) {
-			for (var i = 0; i < this.proiettili.length; i++) {
-					this.proiettili[i].controllaCollisioneMuro(muro);
+		this.controllaCollisioneProiettiliAlieni = function(proiettili) {
+			this.stop = false;
+			for (var i = 0; i < proiettili.length; i++) {
+				if(this.y<=proiettili[i].y&&proiettili[i].y<=this.y+this.dimY&&this.x<=proiettili[i].x&&proiettili[i].x<=this.x+this.dimX)
+				{
+					proiettili[i].y=-1;
+					console.log("Colpito");
+					this.stop = true;
+				}
             }
+			return this.stop;
+		}
+		
+		this.controllaCollisioneFilaMuro = function(filamuro) {
+			for (var z = 0; z < filamuro.muri.length; z++) {
+				for (var i = 0; i < this.proiettili.length; i++) {
+						this.proiettili[i].controllaCollisioneMuro(filamuro.muri[z]);
+				}
+			}
 		}
     }
 };

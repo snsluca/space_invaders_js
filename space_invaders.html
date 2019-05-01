@@ -20,6 +20,7 @@
 	<script src="proiettile.js"></script>
 	<script src="alieno.js"></script>
 	<script src="filaAlieni.js"></script>
+	<script src="filaMuro.js"></script>
 	<script src="mattone.js"></script>
 	<script src="muro.js"></script>
 	<script src="punteggio.js"></script>
@@ -29,30 +30,36 @@
         var ctx = canvas.getContext("2d");
         var dimXcanv = canvas.width;
         var dimYcanv = canvas.height;
-		 
+        var distanzaBordoDx;
+        var stop = false;
 		function disegnaSchermo() {
-           	var distanzaBordoDx;
 			ctx.beginPath();
-         	ctx.clearRect(0, 0, dimXcanv, dimYcanv);
-         	ctx.closePath();
-			for(var i=0; i<fileAlieniArray.length; i++)
+			ctx.clearRect(0, 0, dimXcanv, dimYcanv);
+			ctx.closePath();
+			if(!stop)
+			{
+			filamuro.disegnaFila();
+			giocatore.controllaCollisioneFilaMuro(filamuro);
+			giocatore.disegnaGiocatore();
+			}
+			for(var i=0; i<fileAlieniArray.length&&!stop; i++)
 			{
 				fileAlieniArray[i].disegnaFila();
-				for(var z=0; z<fileAlieniArray[i].alieni.length; z++)
+				fileAlieniArray[i].eliminaAlienoFila();
+				for(var z=0; z<fileAlieniArray[i].alieni.length&&!stop; z++)
 				{
-					fileAlieniArray[i].alieni[z].controllaCollisioneMuro(muro);
+					fileAlieniArray[i].alieni[z].controllaCollisioneMuro(filamuro);
+					fileAlieniArray[i].alieni[z].controllaCollisioneProiettiliGiocatore(giocatore.proiettili, punti);
+					stop=giocatore.controllaCollisioneProiettiliAlieni(fileAlieniArray[i].alieni[z].proiettili);
 				}
 			}
-			muro.disegnaMuro();
-         	giocatore.disegnaGiocatore();
-         	giocatore.controllaCollisioneMuro(muro);
          }
 		
 		var dimensioniXalieno=50;
         let giocatore = new Giocatore(50, 10);
 		
-		var fileAlieniArray= [];
-		let muro = new Muro(100, dimYcanv-dimYcanv/4);
+		var fileAlieniArray=[];
+		let filamuro = new filaMuro(dimYcanv-100, 10, 10, dimXcanv, dimYcanv);
 		
 		for(var i=0; i<3; i++)
 		{
@@ -61,7 +68,8 @@
 		}		
 		
         disegnaPunti();
-        setInterval(disegnaSchermo, 20);
+		if(!stop)
+			setInterval(disegnaSchermo, 20);
 		 
     </script>
 </body>

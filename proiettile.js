@@ -6,7 +6,7 @@ class Proiettile {
         this.y = posY;
         this.invertiVelocita = invertiVelocita || false;
 		
-		this.velocita = 6;
+		this.velocita = 5;
 		
         this.disegnaProiettile = function() {
             ctx.beginPath();
@@ -28,22 +28,10 @@ class Proiettile {
 		this.controllaCollisioneMuro = function(muro) {
 			for(var i=0; i<muro.mattoni.length; i++)
 			{
-				if(this.y<=muro.mattoni[i].y&&muro.mattoni[i].x<=this.x&&this.x<=muro.mattoni[i].x+muro.mattoni[i].dimX)
+				if(muro.mattoni[i].y<=this.y&&this.y<=muro.mattoni[i].y+muro.mattoni[i].dimX&&muro.mattoni[i].x<=this.x&&this.x<=muro.mattoni[i].x+muro.mattoni[i].dimX)
 				{
 					this.y=-1;
                     muro.mattoni.splice(i, 1);
-					//muro.mattoni[i].disegnaMattone();
-				}
-			}
-		}
-		this.controllaCollisioneMuroAlieno = function(muro) {
-			for(var i=0; i<muro.mattoni.length; i++)
-			{
-				if(this.y>=muro.mattoni[i].y&&muro.mattoni[i].x<=this.x&&this.x<=muro.mattoni[i].x+muro.mattoni[i].dimX)
-				{
-					this.y=-1;
-                    muro.mattoni.splice(i, 1);
-					//muro.mattoni[i].disegnaMattone();
 				}
 			}
 		}

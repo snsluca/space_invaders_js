@@ -1,9 +1,9 @@
 class Muro {
     constructor(x, y, dimXmatt, dimYmatt, nMattoniX, nMattoniY) {
-        this.dimXmatt = dimXmatt || 10;
-        this.dimYmatt = dimYmatt || 10;
+        this.dimXmatt = dimXmatt || 4;
+        this.dimYmatt = dimYmatt || 4;
 		
-		this.nMattoniX = nMattoniX || 5;
+		this.nMattoniX = nMattoniX || 10;
         this.nMattoniY = nMattoniY || 5;
 
         this.distanzaXmatt = 1;
